@@ -7,19 +7,25 @@
 #include <GL/glu.h>
 #include "GL/freeglut.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 // используем пространство имен стандартной библиотеки
 using namespace std;
+using namespace glm;
 
-#define CHANGE_TIME_MS 2000
+#define CHANGE_TIME_MS 1000
 
 int index = 0;
-vector<double> black = { 0, 0, 0 };
-vector<double> white = { 1, 1, 1 };
-vector<double> blue = { 0, 0, 1 };
-vector<double> red = { 1, 0, 0 };
-vector<double> violet = { 1, 0, 1 };
+int timer;
+vec3 black = { 0.0f, 0.0f, 0.0f };
+vec3 white = { 1.0f, 1.0f, 1.0f };
+vec3 blue = { 0.0f, 0.0f, 1.0f };
+vec3 red = { 1.0f, 0.0f, 0.0f };
+vec3 violet = { 1.0f, 0.0f, 1.0f };
 
-vector< vector<double>> colors = { black, white, blue, red, violet };
+vector<vec3> colors = { black, white, blue, red, violet };
 int max_index = colors.size();
 
 
@@ -60,6 +66,12 @@ void display(void)
 	glutSwapBuffers();
 };
 
+void change_color() {
+	// смена цвета по таймеру каждые CHANGE_TIME_MS мс
+	index = (index + 1) % max_index; // двигаем индекс на следующий, зацикленно
+	cout << "Changed color to " << colors[index][0] << " " << colors[index][1] << " " << colors[index][2] << endl;
+}
+
 // функция вызывается каждые 20 мс
 void simulation(int value)
 {
@@ -67,23 +79,17 @@ void simulation(int value)
 	glutPostRedisplay();
 	// эта же функция будет вызвана еще раз через 20 мс
 	glutTimerFunc(20, simulation, 0);
+	timer += 20;
+	if (timer >= CHANGE_TIME_MS) { // Если прошло CHANGE_TIME_MS, то меняем цвет и уменьшаем timer
+		change_color();
+		timer -= CHANGE_TIME_MS;
+	}
 };
-
-
-#ifdef CHANGE_TIME_MS
-void change_color_by_timer(int value) {
-	// смена цвета по таймеру каждые CHANGE_TIME_MS мс
-	index = (index + 1) % max_index;
-	glutPostRedisplay();
-	// эта же функция будет вызвана еще раз через  мс
-	glutTimerFunc(CHANGE_TIME_MS, change_color_by_timer, 0);
-}
-#endif
 
 // Функция обработки нажатия клавиш
 void keyboardFunc(unsigned char key, int x, int y)
 {
-	index = (index + 1) % max_index;
+	change_color();
 	printf("Key code is %i\n Color changed\n", key);
 };
 
@@ -113,10 +119,6 @@ void main(int argc, char** argv)
 	glutTimerFunc(20, simulation, 0);
 	// устанавливаем функцию, которая будет вызываться при нажатии на клавишу
 	glutKeyboardFunc(keyboardFunc);
-	
-	#ifdef CHANGE_TIME_MS
-	glutTimerFunc(20, change_color_by_timer, 0); // смена цвета по таймеру каждые CHANGE_TIME_MS мс
-	#endif
 
 	// основной цикл обработки сообщений ОС
 	glutMainLoop();
