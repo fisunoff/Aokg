@@ -10,6 +10,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "GraphicObject.h"
 
 // используем пространство имен стандартной библиотеки
 using namespace std;
@@ -26,6 +27,7 @@ vec3 red = { 1.0f, 0.0f, 0.0f };
 vec3 violet = { 1.0f, 0.0f, 1.0f };
 
 vector<vec3> colors = { black, white, blue, red, violet };
+vector<GraphicObject> graphicObjects;
 int max_index = colors.size();
 
 
@@ -46,22 +48,18 @@ void reshape(int w, int h)
 void display(void)
 {
 	// отчищаем буфер цвета и буфер глубины
-	glClearColor(0.2, 0.88, 0.11, 1.0);
+	glClearColor(0.00, 0.00, 0.00, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	// включаем тест глубины
 	glEnable(GL_DEPTH_TEST);
-
 	// устанавливаем камеру
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(5, 5, 7.5, 0, 0, 0, 0, 1, 0);
-
-	// выводим объект - красный (1,0,0) чайник
-	auto color_now = colors[index];
-	glColor3f(color_now[0], color_now[1], color_now[2]);
-	glutWireTeapot(1.0);
-
+	gluLookAt(10, 15, 17.5, 0, 0, 0, 0, 1, 0);
+	// выводим все графические объекты
+	for (auto& go : graphicObjects) {
+		go.draw();
+	}
 	// смена переднего и заднего буферов
 	glutSwapBuffers();
 };
@@ -97,6 +95,30 @@ void main(int argc, char** argv)
 {
 	setlocale(LC_ALL, "ru");
 
+	GraphicObject obj1;
+	obj1.setPosition(glm::vec3(4, 0, 0));
+	obj1.setAngle(180);
+	obj1.setСolor(glm::vec3(1, 0, 0));
+	graphicObjects.push_back(obj1);
+
+	GraphicObject obj2;
+	obj2.setPosition(glm::vec3(-4, 0, 0));
+	obj2.setAngle(0);
+	obj2.setСolor(glm::vec3(1, 1, 1));
+	graphicObjects.push_back(obj2);
+
+	GraphicObject obj3;
+	obj3.setPosition(glm::vec3(0, 0, 4));
+	obj3.setAngle(270);
+	obj3.setСolor(glm::vec3(0, 1, 0));
+	graphicObjects.push_back(obj3);
+
+	GraphicObject obj4;
+	obj4.setPosition(glm::vec3(0, 0, -4));
+	obj4.setAngle(90);
+	obj4.setСolor(glm::vec3(0, 0, 1));
+	graphicObjects.push_back(obj4);
+
 	// инициализация библиотеки GLUT
 	glutInit(&argc, argv);
 	// инициализация дисплея (формат вывода)
@@ -108,7 +130,7 @@ void main(int argc, char** argv)
 	// 2. устанавливаем размер окна
 	glutInitWindowSize(800, 600);
 	// 3. создаем окно
-	glutCreateWindow("Laba_01");
+	glutCreateWindow("Laba_03");
 
 	// УСТАНОВКА ФУНКЦИЙ ОБРАТНОГО ВЫЗОВА
 	// устанавливаем функцию, которая будет вызываться для перерисовки окна
