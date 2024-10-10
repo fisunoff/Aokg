@@ -55,6 +55,8 @@ void Camera::rotateLeftRight(float degree) {
 void Camera::rotateUpDown(float degree) {
 	if (degree < 0 and angleY < -45)  // защита от переворота
 		return;
+	if (degree > 0 and angleY > 85)  // защита от переворота
+		return;
 	angleY += degree;
 	recalculatePosition();
 }

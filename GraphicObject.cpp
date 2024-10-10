@@ -4,13 +4,14 @@ GraphicObject::GraphicObject()
 	angle = 0;
 	position = { 0,0,0 };
 	color = { 1,1,1 };
-	modelMatrix = {
+	modelMatrix = { 
 		{1,0,0,0},
 		{0,1,0,0},
 		{0,0,1,0},
 		{0,0,0,1}
 	};
 	axis = { 0, 1, 0 }; // задаем ось вращения - Y
+	material = nullptr;
 }
 void GraphicObject::setPosition(vec3 position)
 {
@@ -37,6 +38,10 @@ vec3 GraphicObject::getColor()
 {
 	return color;
 }
+void GraphicObject::setMaterial(shared_ptr<PhongMaterial> material)
+{
+	this->material = material;
+}
 // расчет матрицы modelMatrix на основе position и angle
 void GraphicObject::recalculateModelMatrix()
 {
@@ -47,8 +52,11 @@ void GraphicObject::recalculateModelMatrix()
 void GraphicObject::draw()
 {
 	glColor3f(color.r, color.g, color.b);
+	if (material != nullptr) {
+		material->apply();
+	}
 	glPushMatrix();
 	glMultMatrixf((GLfloat*)&modelMatrix);
-	glutWireTeapot(1.0);
+	glutSolidTeapot(1.0);
 	glPopMatrix();
 }

@@ -18,11 +18,14 @@ void display(void)
 	glClearColor(0.00, 0.00, 0.00, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// включаем тест глубины
-	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST); 
+	glEnable(GL_LIGHTING);
 	// устанавливаем камеру
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	camera.apply();
+	// устанавливаем источник света
+	light.apply(GL_LIGHT0);
 	for (auto& go : graphicObjects) {
 		go.draw();
 	}

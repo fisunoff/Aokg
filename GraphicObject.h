@@ -1,14 +1,16 @@
 #pragma once
 #include <windows.h>
-#include <stdio.h>
-#include <iostream>
+#include <memory>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "GL/freeglut.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "PhongMaterial.h"
+
 using namespace glm;
+using namespace std;
 // КЛАСС ДЛЯ ПРЕДСТАВЛЕНИЯ ОДНОГО ГРАФИЧЕСКОГО ОБЪЕКТА
 class GraphicObject
 {
@@ -26,6 +28,8 @@ public:
 	// Установка текущего цвета объекта
 	void setСolor(vec3 color);
 	vec3 getColor();
+	// Установка используемого материала
+	void setMaterial(shared_ptr<PhongMaterial> material);
 	// Вывести объект
 	void draw();
 private:
@@ -39,6 +43,8 @@ private:
 	mat4 modelMatrix;
 
 	vec3 axis;  // ось вращения
+	// Используемый материал
+	shared_ptr<PhongMaterial> material;
 private:
 	// расчет матрицы modelMatrix на основе position и angle
 	void recalculateModelMatrix();

@@ -18,6 +18,25 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="data.cpp" />
+    <ClCompile Include="display.cpp" />
+    <ClCompile Include="GraphicObject.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="PhongMaterial.cpp" />
+    <ClCompile Include="simulation.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="data.h" />
+    <ClInclude Include="display.h" />
+    <ClInclude Include="GraphicObject.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="PhongMaterial.h" />
+    <ClInclude Include="simulation.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -77,6 +96,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\glm;$(SolutionDir)\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,23 +151,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="camera.cpp" />
-    <ClCompile Include="data.cpp" />
-    <ClCompile Include="display.cpp" />
-    <ClCompile Include="GraphicObject.cpp" />
-    <ClCompile Include="main.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-    <ClCompile Include="simulation.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="data.h" />
-    <ClInclude Include="display.h" />
-    <ClInclude Include="GraphicObject.h" />
-    <ClInclude Include="simulation.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
