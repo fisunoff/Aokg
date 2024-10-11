@@ -12,10 +12,12 @@ GraphicObject::GraphicObject()
 	};
 	axis = { 0, 1, 0 }; // задаем ось вращения - Y
 	material = nullptr;
+	this->mesh = nullptr;
 }
 void GraphicObject::setPosition(vec3 position)
 {
 	this->position = position;
+	recalculateModelMatrix();
 }
 vec3 GraphicObject::getPosition()
 {
@@ -45,8 +47,19 @@ void GraphicObject::setMaterial(shared_ptr<PhongMaterial> material)
 // расчет матрицы modelMatrix на основе position и angle
 void GraphicObject::recalculateModelMatrix()
 {
+	modelMatrix = {
+		{1,0,0,0},
+		{0,1,0,0},
+		{0,0,1,0},
+		{0,0,0,1}
+	};
 	modelMatrix = translate(modelMatrix, position);
-	modelMatrix = rotate(modelMatrix, radians(-angle), axis);
+	modelMatrix = rotate(modelMatrix, radians(-angle), vec3(0, 1, 0));
+}
+
+void GraphicObject::setMesh(shared_ptr<Mesh> mesh)
+{
+	this->mesh = mesh;
 }
 // вывести объект
 void GraphicObject::draw()
@@ -57,6 +70,7 @@ void GraphicObject::draw()
 	}
 	glPushMatrix();
 	glMultMatrixf((GLfloat*)&modelMatrix);
-	glutSolidTeapot(1.0);
+	if (this->mesh != nullptr)
+		this->mesh->draw();
 	glPopMatrix();
 }

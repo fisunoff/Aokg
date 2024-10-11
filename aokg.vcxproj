@@ -22,9 +22,11 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="data.cpp" />
     <ClCompile Include="display.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GraphicObject.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="PhongMaterial.cpp" />
     <ClCompile Include="simulation.cpp" />
   </ItemGroup>
@@ -32,8 +34,10 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="data.h" />
     <ClInclude Include="display.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GraphicObject.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="PhongMaterial.h" />
     <ClInclude Include="simulation.h" />
   </ItemGroup>

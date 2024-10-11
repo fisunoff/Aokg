@@ -8,6 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "PhongMaterial.h"
+#include "Mesh.h"
 
 using namespace glm;
 using namespace std;
@@ -30,6 +31,8 @@ public:
 	vec3 getColor();
 	// Установка используемого материала
 	void setMaterial(shared_ptr<PhongMaterial> material);
+	// Установка используемого меша
+	void setMesh(shared_ptr<Mesh> mesh);
 	// Вывести объект
 	void draw();
 private:
@@ -45,6 +48,8 @@ private:
 	vec3 axis;  // ось вращения
 	// Используемый материал
 	shared_ptr<PhongMaterial> material;
+	// Меш
+	shared_ptr<Mesh> mesh;
 private:
 	// расчет матрицы modelMatrix на основе position и angle
 	void recalculateModelMatrix();

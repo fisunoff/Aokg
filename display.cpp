@@ -26,8 +26,10 @@ void display(void)
 	camera.apply();
 	// устанавливаем источник света
 	light.apply(GL_LIGHT0);
-	for (auto& go : graphicObjects) {
-		go.draw();
+	planeGraphicObject.draw();
+	for (auto& row : mapObjects) {
+		for (auto& elem : row)
+			if (elem != nullptr) elem->draw();
 	}
 
 	// смена переднего и заднего буферов
