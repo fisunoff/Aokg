@@ -1,7 +1,7 @@
 #pragma once
-#include "Mesh.h"
-#include "PhongMaterial.h"
 #include "GraphicObject.h"
+#include "PhongMaterial.h"
+
 #include "GameObject.h"
 #include "rapidjson/document.h"
 using namespace rapidjson;

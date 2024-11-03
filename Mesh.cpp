@@ -1,10 +1,14 @@
 #include "Mesh.h"
 
 Mesh::Mesh() {
-	vertices = {};
-	indices = {};
+	indexCount = 0;
+	bufferIds[0] = 0;
+	bufferIds[1] = 0;
+	glGenBuffers(2, bufferIds);
 }
 void Mesh::load(string filename) {
+	vector<Vertex> vertices;
+	vector<GLuint> indices;
 	// отображение вершины (по используемым ею атрибутам) на индекс в массиве вершин
 	map<string, int> vertexToIndexTable;
 	ifstream file(filename);
@@ -71,22 +75,39 @@ void Mesh::load(string filename) {
 
 		vertices.push_back(vert);
 	}
+	indexCount = indices.size();
+	glBindBuffer(GL_ARRAY_BUFFER, bufferIds[0]);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIds[1]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	file.close();
 }
 
 void Mesh::draw()
 {
-	if (vertices.size() == 0) return;
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferIds[0]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIds[1]);
 
-	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), value_ptr(vertices[0].coord));
-	glNormalPointer(GL_FLOAT, sizeof(Vertex), value_ptr(vertices[0].normal));
-	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), value_ptr(vertices[0].texCoord));
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, coord));
+	glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
+
+	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 };

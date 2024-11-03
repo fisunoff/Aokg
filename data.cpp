@@ -6,7 +6,7 @@ using namespace glm;
 
 Camera camera;
 
-LARGE_INTEGER ticks, ticksPerSecond, lastChech, currentTime, frequency;
+LARGE_INTEGER ticks, ticksPerSecond, lastChech, currentTime, frequency, StartCounter;
 
 Light light;
 int passabilityMap[21][21] = {
@@ -45,7 +45,7 @@ GameObjectFactory gameObjectFactory;
 void initData() {
 	QueryPerformanceCounter(&lastChech);
 	QueryPerformanceFrequency(&frequency);
-
+	QueryPerformanceCounter(&StartCounter);
 
 	camera.setPosition({ 20, 30, 25 });
 	light.setDiffuse({ 1,1,1,1 });

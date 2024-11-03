@@ -1,18 +1,14 @@
 #pragma once
-#include "GL/freeglut.h"
+#include "GL/glew.h"
 #include "graphicObject.h"
 #include <fstream>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include<iomanip>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
 #include <windows.h>
+enum class  MoveDirection { STOP, LEFT, RIGHT, UP, DOWN };
 class GameObject
 {
 public:
@@ -26,6 +22,16 @@ public:
 	void setPosition(ivec2 position);
 	// получение текущих логических координат
 	ivec2 getPosition();
+
+	// начать движение в выбранном направлении с указанной скоростью
+// скорость передвижени€ определ€етс€ количеством клеток в секунду
+	void move(MoveDirection direction, float speed = 3.0f);
+	// проверка на то, что объект в насто€щий момент движетс€
+	bool isMoving();
+	// симул€ци€ игрового объекта (плавное перемещение объекта)
+	// метод вызываетс€ непрерывно в функции simulation
+	void simulate(float sec);
+
 	// вывод игрового объекта на экран
 	void draw(void);
 private:
@@ -33,4 +39,11 @@ private:
 	ivec2 position;
 	// графический объект (дл€ вывода на экран)
 	GraphicObject graphicObject;
+	// состо€ние объекта (заданное направление перемещени€)
+	MoveDirection sost;
+	// прогресс в перемещении (от 0.0 до 1.0)
+	float progress;
+	// скорость перемещени€
+	float speed;
+
 };

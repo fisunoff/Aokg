@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <vector>
 
+#include "GL/glew.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "GL/freeglut.h"
@@ -27,7 +28,7 @@ public:
 	// установка всех параметров источника света с заданным номером
 	// данная функция должна вызываться после установки камеры,
 	// т.к. здесь устанавливается позиция источника света
-	void apply(GLenum LightNumber );
+	void apply(GLenum LightNumber);
 private:
 	// позиция источника света
 	vec4 position;

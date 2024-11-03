@@ -1,26 +1,23 @@
 #pragma once
-#include <iostream>
-#include<iomanip>
-#include <vector>
-#include <windows.h>
-#include <string>
+#include "GL/glew.h"
+#include "GameObjectFactory.h"
+#include "Camera.h"
 
 #include "GL/freeglut.h"
+#include "Light.h"
+#include "PhongMaterial.h"
 #include <fstream>
-#include <memory>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include "graphicObject.h"
-#include "Camera.h"
-#include "Light.h"
-#include "PhongMaterial.h"
-#include "Mesh.h"
-#include "GameObject.h"
-#include "GameObjectFactory.h"
+#include<iomanip>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+#include <windows.h>
 using namespace std;
 using namespace glm;
 
@@ -28,7 +25,7 @@ extern vector<GraphicObject> graphicObjects;
 extern vector<shared_ptr<PhongMaterial>> materials;
 
 extern Camera camera;
-extern LARGE_INTEGER ticks, ticksPerSecond, lastChech, currentTime, frequency;
+extern LARGE_INTEGER ticks, ticksPerSecond, lastChech, currentTime, frequency, StartCounter;
 extern Light light;
 extern vector<shared_ptr<Mesh>> meshes;
 extern int passabilityMap[21][21];

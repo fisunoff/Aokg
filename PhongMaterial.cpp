@@ -4,7 +4,7 @@ PhongMaterial::PhongMaterial() {
 	diffuse = { 0.0,0.0,0.0,1 };
 	specular = { 0.0,0.0,0.0,1 };
 	emission = { 0.0,0.0,0.0,1 };
-	shininess =0.0;
+	shininess = 0.0;
 }
 void PhongMaterial::setAmbient(vec4 color) {
 	ambient = color;

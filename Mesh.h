@@ -1,19 +1,22 @@
 #pragma once
-#include <iostream>
-#include<iomanip>
-#include <vector>
 #include <windows.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include "GL/freeglut.h"
+#include <iostream>
 #include <fstream>
+#include <sstream>
+#include <vector>
+#include <map>
+#include <string>
+#include <memory>
+#include <algorithm>
+
+#include "GL/glew.h"
+#include <GL/GL.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+#include "GL/freeglut.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <memory>
-#include <string>
-#include <sstream>
-#include <map>
 using namespace std;
 using namespace glm;
 struct Vertex
@@ -37,7 +40,8 @@ public:
 	// вывод меша (передача всех вершин в OpenGL)
 	void draw();
 private:
-	// массив вершин полигональной сетки
-	vector<Vertex> vertices;
-	vector<GLuint> indices;
+	// количество индексов
+	int indexCount;
+	// индексы (идентификаторы) буферов OpenGL
+	GLuint bufferIds[2];
 };
