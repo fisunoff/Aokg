@@ -1,15 +1,14 @@
 #pragma once
-#include <windows.h>
-#include <memory>
+#include "GL/freeglut.h"
+#include "Mesh.h"
+#include "PhongMaterial.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include "GL/freeglut.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "PhongMaterial.h"
-#include "Mesh.h"
-
+#include <memory>
+#include <Windows.h>
 using namespace glm;
 using namespace std;
 // КЛАСС ДЛЯ ПРЕДСТАВЛЕНИЯ ОДНОГО ГРАФИЧЕСКОГО ОБЪЕКТА
@@ -44,11 +43,9 @@ private:
 	vec3 color;
 	// Матрица модели - чтоб не вычислять каждый раз
 	mat4 modelMatrix;
-
-	vec3 axis;  // ось вращения
 	// Используемый материал
 	shared_ptr<PhongMaterial> material;
-	// Меш
+	// Используемый меш
 	shared_ptr<Mesh> mesh;
 private:
 	// расчет матрицы modelMatrix на основе position и angle

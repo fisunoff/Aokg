@@ -362,3 +362,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# библиотеки грузим целиком
+!/freeglut/
+!/glew-2.1.0/
+!/glm/
+!/rapidjson-master/

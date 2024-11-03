@@ -13,6 +13,7 @@
 #include <memory>
 #include <string>
 #include <sstream>
+#include <map>
 using namespace std;
 using namespace glm;
 struct Vertex
@@ -37,5 +38,6 @@ public:
 	void draw();
 private:
 	// массив вершин полигональной сетки
-	std::vector<Vertex> vertices;
+	vector<Vertex> vertices;
+	vector<GLuint> indices;
 };

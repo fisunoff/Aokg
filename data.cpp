@@ -3,19 +3,12 @@
 using namespace std;
 using namespace glm;
 
-vector<GraphicObject> graphicObjects;
 
 Camera camera;
 
-LARGE_INTEGER ticks, ticksPerSecond;
+LARGE_INTEGER ticks, ticksPerSecond, lastChech, currentTime, frequency;
 
-GraphicObject obj1;
-GraphicObject obj2;
-GraphicObject obj3;
-GraphicObject obj4;
 Light light;
-vector<shared_ptr<PhongMaterial>> materials;
-vector<shared_ptr<Mesh>> meshes;
 int passabilityMap[21][21] = {
  3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
  3,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,2,0,0,0,3,
@@ -41,60 +34,53 @@ int passabilityMap[21][21] = {
 };
 // список игровых объектов расположенных на карте
 shared_ptr<GameObject> mapObjects[21][21];
+shared_ptr<GameObject> player;
+
 // графический объект для плоскости (частный случай)
 GraphicObject planeGraphicObject;
 
-void init_data() {
-	for (int i = 0; i < 4; i++)
-	{
-		materials.emplace_back(make_shared<PhongMaterial>());
-	}
-	materials[0]->load("data//materials//material_1.txt");
-	materials[1]->load("data//materials//material_2.txt");
-	materials[2]->load("data//materials//material_3.txt");
-	materials[3]->load("data//materials//material_4.txt");
+// фабрика для создания игровых объектов
+GameObjectFactory gameObjectFactory;
 
-	for (int i = 0; i < 4; i++)
-	{
-		meshes.emplace_back(make_shared<Mesh>());
-	}
-	meshes[0]->load("data//meshes//ChamferBox.obj");
-	meshes[1]->load("data//meshes//Box.obj");
-	meshes[2]->load("data//meshes//Sphere.obj");
-	meshes[3]->load("data//meshes//SimplePlane.obj");
+void initData() {
+	QueryPerformanceCounter(&lastChech);
+	QueryPerformanceFrequency(&frequency);
+
 
 	camera.setPosition({ 20, 30, 25 });
 	light.setDiffuse({ 1,1,1,1 });
 	light.setSpecular({ 1,1,1,1 });
 
-	planeGraphicObject.setMesh(meshes[3]);
-	planeGraphicObject.setMaterial(materials[0]);
-	planeGraphicObject.setPosition({ 0,-0.5,0 });
-
-	GraphicObject chambox, graybox, darkbox;
-	chambox.setMesh(meshes[0]);
-	chambox.setMaterial(materials[1]);
-
-	graybox.setMesh(meshes[1]);
-	graybox.setMaterial(materials[2]);
-
-	darkbox.setMesh(meshes[1]);
-	darkbox.setMaterial(materials[3]);
-	for (int i = 0; i < 21; i++)
-		for (int j = 0; j < 21; j++)
-			if (passabilityMap[i][j])
-			{
-				mapObjects[i][j] = make_shared<GameObject>();
-				mapObjects[i][j]->setPosition(i - 10, j - 10);
-				switch (passabilityMap[i][j])
-				{
-				default: break;
-				case 1:
-					mapObjects[i][j]->setGraphicObject(chambox); break;
-				case 2:
-					mapObjects[i][j]->setGraphicObject(graybox); break;
-				case 3:
-					mapObjects[i][j]->setGraphicObject(darkbox); break;
-				}
+	// инициализация фабрики (в дальнейшем на основе json-файла)
+	gameObjectFactory.init("data//GameObjectsDescription.json");
+	// инициализация объектов сцены
+	for (int i = 0; i < 21; i++) {
+		for (int j = 0; j < 21; j++) {
+			switch (passabilityMap[i][j]) {
+			case 1:
+				mapObjects[i][j] = gameObjectFactory.create(GameObjectType::LIGHT_OBJECT, i - 10, j - 10);
+				break;
+			case 2:
+				mapObjects[i][j] = gameObjectFactory.create(GameObjectType::HEAVY_OBJECT, i - 10, j - 10);
+				break;
+			case 3:
+				mapObjects[i][j] = gameObjectFactory.create(GameObjectType::BORDER_OBJECT, i - 10, j - 10);
+				break;
+			default:
+				mapObjects[i][j] = nullptr;
+				break;
 			}
+		}
+	}
+	// инициализация главного героя
+	player = gameObjectFactory.create(GameObjectType::PLAYER, 9, -9);
+	// инициализация плоскости
+	planeGraphicObject.setPosition(vec3(0, -0.501, 0));
+	shared_ptr<Mesh> planeMesh = make_shared<Mesh>();
+	planeMesh->load("data\\meshes\\HighPolyPlane.obj");
+	planeGraphicObject.setMesh(planeMesh);
+	shared_ptr<PhongMaterial> planeMaterial = make_shared<PhongMaterial>();
+	planeMaterial->load("data\\materials\\PlaneMaterial.txt");
+	planeGraphicObject.setMaterial(planeMaterial);
+
 }

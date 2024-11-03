@@ -2,8 +2,11 @@
 
 Mesh::Mesh() {
 	vertices = {};
+	indices = {};
 }
 void Mesh::load(string filename) {
+	// отображение вершины (по используемым ею атрибутам) на индекс в массиве вершин
+	map<string, int> vertexToIndexTable;
 	ifstream file(filename);
 	// вектор для хранения геометрических координат
 	vector<vec3> v;
@@ -13,6 +16,7 @@ void Mesh::load(string filename) {
 	vector<vec3> t;
 	// вектор для хранения индексов атрибутов, для построения вершин
 	vector<ivec3> fPoints;
+	int index = 0;
 	while (!file.eof()) {
 		string param;
 		file >> param;
@@ -37,6 +41,12 @@ void Mesh::load(string filename) {
 			{
 				ivec3 face;
 				file >> str;
+				map<string, int>::iterator iter = vertexToIndexTable.find(str);
+				if (iter != vertexToIndexTable.end())
+				{
+					indices.push_back(iter->second);
+					continue;
+				}
 				stringstream ss(str);
 				string temp;
 				getline(ss, temp, '/');
@@ -45,6 +55,8 @@ void Mesh::load(string filename) {
 				face[1] = stoi(temp);
 				getline(ss, temp, '/');
 				face[2] = stoi(temp);
+				vertexToIndexTable.insert(make_pair(str, index));
+				indices.push_back(index++);
 				fPoints.push_back(face);
 			}
 		}
@@ -71,7 +83,7 @@ void Mesh::draw()
 	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), value_ptr(vertices[0].coord));
 	glNormalPointer(GL_FLOAT, sizeof(Vertex), value_ptr(vertices[0].normal));
 	glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), value_ptr(vertices[0].texCoord));
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
