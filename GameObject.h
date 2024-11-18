@@ -31,16 +31,16 @@ public:
 	// симуляция игрового объекта (плавное перемещение объекта)
 	// метод вызывается непрерывно в функции simulation
 	void simulate(float sec);
-
+	int getLastDir();
 	// вывод игрового объекта на экран
 	void draw(void);
 private:
-	// логические координаты игрового объекта
-	ivec2 position;
 	// графический объект (для вывода на экран)
 	GraphicObject graphicObject;
+	// логические координаты игрового объекта
+	ivec2 position;
 	// состояние объекта (заданное направление перемещения)
-	MoveDirection sost;
+	MoveDirection sost, lastdir;
 	// прогресс в перемещении (от 0.0 до 1.0)
 	float progress;
 	// скорость перемещения

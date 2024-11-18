@@ -1,5 +1,14 @@
 #include "display.h"
 
+void drawPlane()
+{
+	glActiveTexture(GL_TEXTURE0);
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	planeTexture.apply();
+	planeGraphicObject.draw();
+	Texture::disableAll();
+}
 // функция, вызываемая при изменении размеров окна
 void reshape(int w, int h)
 {
@@ -26,8 +35,12 @@ void display(void)
 	camera.apply();
 	// устанавливаем источник света
 	light.apply(GL_LIGHT0);
-	planeGraphicObject.draw();
-	player->draw();
+	drawPlane();
+	if (player)
+		player->draw();
+	for (auto& i : enemy)
+		if (i)
+			i->draw();
 	for (auto& row : mapObjects) {
 		for (auto& elem : row)
 			if (elem != nullptr) elem->draw();

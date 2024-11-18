@@ -7,3 +7,4 @@ void keyboard();
 void movePlayer();
 void gameObjectsSimulation(float);
 void cameraSimulation(float);
+void moveEnemy(std::shared_ptr<GameObject>& entity);

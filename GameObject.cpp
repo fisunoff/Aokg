@@ -62,3 +62,7 @@ bool GameObject::isMoving()
 {
 	return this->sost != MoveDirection::STOP;
 }
+int GameObject::getLastDir()
+{
+	return rand() % 4;
+}
