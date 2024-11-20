@@ -51,7 +51,7 @@ vec3 GraphicObject::getColor()
 	temp[2] = this->color[2];
 	return temp;
 }
-void GraphicObject::setMaterial(shared_ptr<PhongMaterial> material)
+void GraphicObject::setMaterial(shared_ptr<Material> material)
 {
 	this->material = material;
 }

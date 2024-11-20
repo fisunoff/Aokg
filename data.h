@@ -8,7 +8,7 @@
 #include "GL/freeglut.h"
 #include "Light.h"
 #include "Texture.h"
-#include "PhongMaterial.h"
+#include "PhongMaterialWithTexture.h"
 #include <fstream>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -25,7 +25,6 @@ using namespace std;
 using namespace glm;
 
 extern vector<GraphicObject> graphicObjects;
-extern vector<shared_ptr<PhongMaterial>> materials;
 extern Texture planeTexture;
 extern Camera camera;
 extern LARGE_INTEGER ticks, ticksPerSecond, lastChech, currentTime, frequency, StartCounter;

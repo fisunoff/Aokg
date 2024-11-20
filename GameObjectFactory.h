@@ -1,4 +1,9 @@
 #pragma once
+#include <windows.h> //Required for RapidJSON
+
+#include "Mesh.h"
+
+#include "PhongMaterialWithTexture.h"
 #include "GraphicObject.h"
 #include "PhongMaterial.h"
 
@@ -25,10 +30,11 @@ public:
 	bool init(string filename);
 	// создание нового объекта заданного типа
 	shared_ptr<GameObject> create(GameObjectType type, int x, int y);
+	shared_ptr<GameObject> create(GameObjectType type, vec2 pos);
 private:
 	// меши для каждого типа объекта
 	vector<shared_ptr<Mesh>> meshes;
 	// материалы для каждого типа объекта
-	vector<shared_ptr<PhongMaterial>> materials;
+	vector<shared_ptr<Material>> materials;
 };
 

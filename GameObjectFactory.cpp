@@ -25,10 +25,15 @@ bool GameObjectFactory::init(string path)
 // если значение является строкой
 	for (auto itr = jsonFile.MemberBegin(); itr != jsonFile.MemberEnd(); ++itr) {
 		Mesh mesh;
+
+		(jsonFile[itr->name].HasMember("texture")) ?
+			materials.emplace_back(std::make_shared<PhongMaterialWithTexture>(jsonFile[itr->name]["texture"].GetString(), 0))
+			:
+			materials.emplace_back(std::make_shared<PhongMaterial>());
+
 		mesh.load(jsonFile[itr->name.GetString()]["mesh"].GetString());
 		meshes.emplace_back(make_shared<Mesh>(mesh));
 
-		materials.emplace_back(std::make_shared<PhongMaterial>());
 		auto tempArr = jsonFile[itr->name.GetString()]["material"]["diffuse"].GetArray();
 		materials.back()->setDiffuse({ tempArr[0].GetDouble(),tempArr[1].GetDouble() ,tempArr[2].GetDouble() ,tempArr[3].GetDouble() });
 
@@ -59,4 +64,14 @@ shared_ptr<GameObject> GameObjectFactory::create(GameObjectType type, int x, int
 	newObject->setGraphicObject(gf);
 	return newObject;
 
+}
+shared_ptr<GameObject> GameObjectFactory::create(GameObjectType type, glm::vec2 pos)
+{
+	std::shared_ptr<GameObject> newObject = std::make_shared<GameObject>();
+	GraphicObject graphObj;
+	graphObj.setMesh(meshes[type]);
+	graphObj.setMaterial(materials[type]);
+	newObject->setPosition(pos);
+	newObject->setGraphicObject(graphObj);
+	return newObject;
 }

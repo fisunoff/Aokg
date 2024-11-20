@@ -83,15 +83,14 @@ void initData() {
 			xPos = rand() % 21, yPos = rand() % 21;
 		enemy[i] = gameObjectFactory.create(GameObjectType::ENEMY, xPos - 10, yPos - 10);
 		passabilityMap[xPos][yPos] = 4;
+		mapObjects[xPos][yPos] = enemy[i];
 	}
 	// инициализация плоскости
-	planeTexture.load(R"(data\textures\plane.jpg)");
 	planeGraphicObject.setPosition(vec3(0, -0.501, 0));
 	shared_ptr<Mesh> planeMesh = make_shared<Mesh>();
 	planeMesh->load("data\\meshes\\HighPolyPlane.obj");
 	planeGraphicObject.setMesh(planeMesh);
-	shared_ptr<PhongMaterial> planeMaterial = make_shared<PhongMaterial>();
-	planeMaterial->load("data\\materials\\PlaneMaterial.txt");
+	shared_ptr<PhongMaterialWithTexture> planeMaterial = make_shared<PhongMaterialWithTexture>("data\\materials\\PlaneMaterial.txt", R"(data\textures\plane.jpg)");
 	planeGraphicObject.setMaterial(planeMaterial);
 
 }

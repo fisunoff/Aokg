@@ -1,4 +1,5 @@
 #include "Texture.h"
+Texture::Texture() : texIndex(0) {};
 
 void Texture::load(string src) {
 	wchar_t unicodeStr[256];

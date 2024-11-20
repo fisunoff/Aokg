@@ -26,9 +26,12 @@ void simulation()
 
 	if (player)
 		movePlayer();
-
+	bombSimulation(currentTime.QuadPart);
 	for (int i = 0; i < 3; i++)
-		moveEnemy(enemy[i]);
+	{
+		if (enemy[i])
+			moveEnemy(enemy[i]);
+	}
 
 	glutPostRedisplay();
 
@@ -125,6 +128,83 @@ void gameObjectsSimulation(float deltaTime)
 			i->simulate(deltaTime);
 
 }
+void killPlayer()
+{
+	player.reset();
+	system("cls");
+}
+void destroyIfPossible(glm::ivec2 pos, glm::ivec2 displacement, bool Decrease)
+{
+	if (Decrease) displacement *= -1;
+
+	if (player)
+	{
+		glm::ivec2 realPos{ pos.x - 10,pos.y - 10 };
+		glm::ivec2 playerPos = player->getPosition();
+		if ((glm::ivec2({ realPos.x + displacement.x,realPos.y + displacement.y }) == playerPos && passabilityMap[pos.x][pos.y] == 0)
+			|| glm::ivec2({ realPos.x,realPos.y }) == playerPos)
+		{
+			killPlayer();
+			return;
+		}
+	}
+
+	if (passabilityMap[pos.x][pos.y] == 1 || passabilityMap[pos.x][pos.y] == 4)
+	{
+		for (int i = 0; i < 3; i++)
+			if (enemy[i] && enemy[i] == mapObjects[pos.x][pos.y])
+			{
+				enemy[i].reset();
+				break;
+			}
+		mapObjects[pos.x][pos.y].reset();
+		passabilityMap[pos.x][pos.y] = 0;
+		return;
+	}
+	if (passabilityMap[pos.x][pos.y] == 0 &&
+		(passabilityMap[pos.x + displacement.x][pos.y + displacement.y] == 1 || passabilityMap[pos.x + displacement.x][pos.y + displacement.y] == 4))
+	{
+		for (int i = 0; i < 3; i++)
+			if (enemy[i] && enemy[i] == mapObjects[pos.x + displacement.x][pos.y + displacement.y])
+			{
+				enemy[i].reset();
+				break;
+			}
+		mapObjects[pos.x + displacement.x][pos.y + displacement.y].reset();
+		passabilityMap[pos.x + displacement.x][pos.y + displacement.y] = 0;
+	}
+	return;
+}
+void bombSimulation(double currentTime)
+{
+	static double timeToActivate = 2.0 * frequency.QuadPart;
+	static LARGE_INTEGER placementTime;
+	static ivec2 bombPos;
+	static bool isBombSet = false;
+	if (player && !isBombSet && (GetAsyncKeyState(VK_SPACE)) & 0x8000)
+	{
+		isBombSet = true;
+		QueryPerformanceCounter(&placementTime);
+		bombPos = { player->getPosition().x + 10, player->getPosition().y + 10 };
+		mapObjects[bombPos.x][bombPos.y] = gameObjectFactory.create(GameObjectType::BOMB, bombPos - 10);
+		passabilityMap[bombPos.x][bombPos.y] = 5;
+	}
+
+	if (isBombSet && currentTime - placementTime.QuadPart >= timeToActivate)
+	{
+		isBombSet = false;
+		mapObjects[bombPos.x][bombPos.y].reset();
+		passabilityMap[bombPos.x][bombPos.y] = 0;
+
+
+		destroyIfPossible({ bombPos.x - 1,bombPos.y }, { 1,0 }, true);
+		destroyIfPossible({ bombPos.x + 1,bombPos.y }, { 1,0 }, false);
+		destroyIfPossible({ bombPos.x, bombPos.y - 1 }, { 0,1 }, true);
+		destroyIfPossible({ bombPos.x, bombPos.y + 1 }, { 0,1 }, false);
+	}
+
+}
+
 
 void moveEnemy(shared_ptr<GameObject>& entity)
 {
@@ -138,12 +218,13 @@ void moveEnemy(shared_ptr<GameObject>& entity)
 	};
 	ivec2 entityPos = entity->getPosition();
 	int PickMove = entity->getLastDir();
-	//	int PickMove = rand() % 4;
 	if (!entity->isMoving() && passabilityMap[entityPos.x + Moves[PickMove].x1][entityPos.y + Moves[PickMove].y1] == 0)
 	{
-		entity->move(Moves[PickMove].dir, 3);
+		entity->move(Moves[PickMove].dir, 1);
 		swap(passabilityMap[entityPos.x + Moves[PickMove].x1][entityPos.y + Moves[PickMove].y1],
 			passabilityMap[entityPos.x + 10][entityPos.y + 10]);
+		swap(mapObjects[entityPos.x + Moves[PickMove].x1][entityPos.y + Moves[PickMove].y1],
+			mapObjects[entityPos.x + 10][entityPos.y + 10]);
 	}
 
 }

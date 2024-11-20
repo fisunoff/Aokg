@@ -1,7 +1,7 @@
 #pragma once
 #include "GL/glew.h"
 #include "Mesh.h"
-#include "PhongMaterial.h"
+#include "Material.h"
 #include <memory>
 #include <Windows.h>
 using namespace glm;
@@ -24,7 +24,7 @@ public:
 	void setСolor(vec3 color);
 	vec3 getColor();
 	// Установка используемого материала
-	void setMaterial(shared_ptr<PhongMaterial> material);
+	void setMaterial(shared_ptr<Material> material);
 	// Установка используемого меша
 	void setMesh(shared_ptr<Mesh> mesh);
 	// Вывести объект
@@ -39,7 +39,7 @@ private:
 	// Матрица модели - чтоб не вычислять каждый раз
 	mat4 modelMatrix;
 	// Используемый материал
-	shared_ptr<PhongMaterial> material;
+	shared_ptr<Material> material;
 	// Используемый меш
 	shared_ptr<Mesh> mesh;
 private:

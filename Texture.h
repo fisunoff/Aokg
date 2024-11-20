@@ -32,6 +32,7 @@ enum class TextureFilter {
 class Texture
 {
 public:
+	Texture();
 	// загрузка текстуры из внешнего файла
 	void load(std::string filename);
 

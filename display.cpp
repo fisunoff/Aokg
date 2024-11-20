@@ -5,7 +5,6 @@ void drawPlane()
 	glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	planeTexture.apply();
 	planeGraphicObject.draw();
 	Texture::disableAll();
 }
@@ -38,13 +37,9 @@ void display(void)
 	drawPlane();
 	if (player)
 		player->draw();
-	for (auto& i : enemy)
-		if (i)
-			i->draw();
-	for (auto& row : mapObjects) {
-		for (auto& elem : row)
-			if (elem != nullptr) elem->draw();
-	}
+	for (auto& i : mapObjects)
+		for (auto& j : i)
+			if (j != nullptr) j->draw();
 
 	// смена переднего и заднего буферов
 	glutSwapBuffers();
