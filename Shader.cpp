@@ -1,61 +1,12 @@
 #include "Shader.h"
 
-
-bool Shader::load(std::string vertexShaderFileName, std::string fragmentShaderFilename){
-	GLuint vertexShader = createShaderObject(GL_VERTEX_SHADER, vertexShaderFileName);
-	if (!vertexShader)
-	{
-		std::ofstream crash_log("crash_" + std::to_string(time(nullptr)) + ".log");
-		crash_log << "Compilation error: vertex shader sourceFile - " << vertexShaderFileName;
-		crash_log.close();
-		return false;
-	}
-
-	GLuint fragmentShader = createShaderObject(GL_FRAGMENT_SHADER, fragmentShaderFilename);
-	if (!fragmentShader)
-	{
-		std::ofstream crash_log("crash_" + std::to_string(time(nullptr)) + ".log");
-		crash_log << "Compilation error: fragment shader sourceFile - " << fragmentShaderFilename;
-		crash_log.close();
-		glDeleteShader(vertexShader);
-		return false;
-	}
-	// Создаем шейдерную программу
-	program = glCreateProgram();
-	glAttachShader(program, vertexShader);
-	glAttachShader(program, fragmentShader);	
-	glLinkProgram(program);
-
-	// Проверка на ошибки линковки
-	GLint linkResult;
-	glGetProgramiv(program, GL_LINK_STATUS, &linkResult);
-	if (linkResult) {
-		this->uniforms.insert({ "color1",glGetUniformLocation(this->program, "color1") });
-		this->uniforms.insert({ "color2",glGetUniformLocation(this->program, "color2") });
-		this->uniforms.insert({ "offset",glGetUniformLocation(this->program, "offset") });
-
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-		return true;
-	}
-
-	char errorMsg[1024];
-	std::string crashLogFilename = "crash_" + std::to_string(time(nullptr)) + ".log";
-	glGetProgramInfoLog(this->program, 1024, nullptr, errorMsg);
-	std::ofstream crash_log(crashLogFilename);
-	crash_log << "Linking error: sourceFiles - " << fragmentShaderFilename << "," << vertexShaderFileName << "\nLOG:" << errorMsg;
-	crash_log.close();
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-	glDeleteProgram(program);
-}
-
 GLuint Shader::createShaderObject(GLenum type, std::string sourcePath)
 {
 	std::ifstream shaderFile(sourcePath);
 	if (!shaderFile)
+	{
 		return 0;
-
+	}
 
 	shaderFile.seekg(0, shaderFile.end);
 	std::vector<char> buffer(shaderFile.tellg());
@@ -63,27 +14,77 @@ GLuint Shader::createShaderObject(GLenum type, std::string sourcePath)
 	shaderFile.read(buffer.data(), buffer.size());
 
 	GLuint shaderID = glCreateShader(type);
-
-	GLchar const* pointerToBuffer = buffer.data();
-	glShaderSource(shaderID, 1, &pointerToBuffer, nullptr);
+	
+	GLchar const* pointerToBuffer =  buffer.data() ;
+	glShaderSource(shaderID, 1,&pointerToBuffer, nullptr);
 	glCompileShader(shaderID);
 
 	GLint compileResult;
 	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compileResult);
 	if (compileResult) //GL_TRUE
 		return shaderID;
-	char errorMsg[1024];
+
+	char errorMsg[1024]{ 0 };
 	glGetShaderInfoLog(shaderID, 1024, nullptr, errorMsg);
-	std::ofstream crash_log("crash_" + std::to_string(time(nullptr)) + ".log");
-	crash_log << "Compilation error: sourceFile - " << sourcePath << " " << "\nLOG:" << errorMsg;
+	std::string crashLogFilename = "crash_" + std::to_string(time(nullptr)) + ".log";
+	std::ofstream crash_log(crashLogFilename);
+	printf("Failed to compile %s:\n%s", sourcePath.c_str(), errorMsg);
+	crash_log << "Compilation error: sourceFile - " << sourcePath << " " << "\nLOG:\n" << errorMsg;
+	printf("A crash has occured. Saved crash info in file: %s.", crashLogFilename.c_str());
 	crash_log.close();
+	return 0;
+}
+
+bool Shader::load(std::string vertexShaderName, std::string fragmentShaderName)
+{
+	GLuint vertexShader = createShaderObject(GL_VERTEX_SHADER, vertexShaderName);
+	if (!vertexShader)
+		return false;
+	GLuint fragmentShader = createShaderObject(GL_FRAGMENT_SHADER, fragmentShaderName);
+	if (!fragmentShader)
+	{
+		glDeleteShader(vertexShader);
+		return false;
+	}
+
+	program = glCreateProgram();
+	glAttachShader(program, fragmentShader);
+	glAttachShader(program, vertexShader);
+
+	glLinkProgram(program);
+
+	GLint linkResult;
+	glGetProgramiv(program, GL_LINK_STATUS, &linkResult);
+	if (linkResult)
+	{
+		this->uniforms.insert({ "color",glGetUniformLocation(this->program, "color") });
+		this->uniforms.insert({ "projectionMatrix",glGetUniformLocation(this->program, "projectionMatrix") });
+		this->uniforms.insert({ "modelViewMatrix",glGetUniformLocation(this->program, "modelViewMatrix") });
+
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
+		printf("Shader compiled. Program ID - %d\n", this->program);
+		return true;
+	}
+
+	char errorMsg[1024];
+	std::string crashLogFilename = "crash_" + std::to_string(time(nullptr)) + ".log";
+	glGetProgramInfoLog(this->program, 1024, nullptr, errorMsg);
+	std::ofstream crash_log(crashLogFilename);
+	printf("Failed to link shaders to program, LOG:\n%s", errorMsg);
+	crash_log << "Linking error: sourceFiles - " << fragmentShaderName << "," << vertexShaderName<< "\nLOG:" << errorMsg;
+	printf("A crash has occured. Saved crash info in file: %s.", crashLogFilename.c_str());
+	crash_log.close();
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+	glDeleteProgram(program);
 	return 0;
 }
 
 GLuint Shader::currentProgram = 0;
 
 void Shader::deactivate()
-{
+{	
 	Shader::currentProgram = 0;
 	glUseProgram(0);
 }
@@ -94,7 +95,7 @@ void Shader::activate()
 	glUseProgram(this->program);
 }
 
-GLuint Shader::getUniformLocation(std::string name)
+GLuint Shader::getUniformLocation(std::string name) 
 {
 	std::map<std::string, GLuint>::iterator position = this->uniforms.find(name);
 	if (position != this->uniforms.end())

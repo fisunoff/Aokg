@@ -19,11 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="drawBox.cpp" />
+    <ClCompile Include="GraphicObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Data.h" />
+    <ClInclude Include="drawBox.h" />
+    <ClInclude Include="GraphicObject.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

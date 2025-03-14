@@ -11,6 +11,8 @@
 
 
 #include <string>
+#include <cmath>
+#include <algorithm>
 #include <fstream>
 #include <sstream>
 #include <memory>
