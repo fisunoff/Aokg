@@ -23,6 +23,8 @@
     <ClCompile Include="drawBox.cpp" />
     <ClCompile Include="GraphicObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -30,6 +32,8 @@
     <ClInclude Include="Data.h" />
     <ClInclude Include="drawBox.h" />
     <ClInclude Include="GraphicObject.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

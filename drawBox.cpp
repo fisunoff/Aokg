@@ -44,7 +44,7 @@ void drawBox()
 		int location = 0;
 		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(location);
-		
+
 		// "отвязка" буфера VAO на всякий случай, чтоб случайно не испортить
 		glBindVertexArray(0);
 
