@@ -31,6 +31,11 @@ int GraphicObject::getMeshId()
 	return this->meshId;
 }
 
+int GraphicObject::getMaterialId()
+{
+	return this->materialId;
+}
+
 int GraphicObject::getTextureId()
 {
 	return this->textureId;
@@ -56,6 +61,11 @@ void GraphicObject::setAngle(float degree)
 void GraphicObject::setMeshId(int newId)
 {
 	this->meshId = newId;
+}
+
+void GraphicObject::setMaterialId(int newId)
+{
+	this->materialId = newId;
 }
 
 void GraphicObject::setTextureId(int newId)

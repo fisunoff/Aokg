@@ -4,6 +4,8 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "GraphicObject.h"
+#include "Material.h"
+#include "Light.h"
 #include "ResourceManager.h"
 
 class RenderManager
@@ -13,7 +15,7 @@ class RenderManager
 	std::vector<Shader> shaders;
 	std::vector<GraphicObject> graphicObjects;
 
-	RenderManager():rm(ResourceManager::instance()) {};
+	RenderManager() :rm(ResourceManager::instance()) {};
 	RenderManager(const RenderManager& root) = delete;
 	RenderManager& operator=(const RenderManager&) = delete;
 public:
@@ -23,7 +25,7 @@ public:
 		return renderManager;
 	}
 
-	void init();
+	bool init();
 	void start();
 	void setCamera(Camera* camera);
 	void addToRenderQueue(GraphicObject& graphicObject);

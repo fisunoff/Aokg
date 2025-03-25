@@ -14,7 +14,7 @@ GLuint Shader::createShaderObject(GLenum type, std::string sourcePath)
 	shaderFile.read(buffer.data(), buffer.size());
 
 	GLuint shaderID = glCreateShader(type);
-	
+
 	GLchar const* pointerToBuffer = buffer.data();
 	glShaderSource(shaderID, 1, &pointerToBuffer, nullptr);
 	glCompileShader(shaderID);
@@ -57,14 +57,27 @@ bool Shader::load(std::string vertexShaderName, std::string fragmentShaderName)
 	glGetProgramiv(program, GL_LINK_STATUS, &linkResult);
 	if (linkResult)
 	{
-		this->uniforms.insert({ "color",glGetUniformLocation(this->program, "color") });
-		this->uniforms.insert({ "projectionMatrix",glGetUniformLocation(this->program, "projectionMatrix") });
-		this->uniforms.insert({ "modelViewMatrix",glGetUniformLocation(this->program, "modelViewMatrix") });
-		this->uniforms.insert({ "texture_0",glGetUniformLocation(this->program, "texture_0") });
+		GLint uniformCount, uniformSize;
+		GLenum uniformType;
+		GLchar uniformName[30];
+		GLsizei length;
+
+		printf("Shader compiled. Seeking uniform variables...\n");
+		glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &uniformCount);
+
+		if (uniformCount == 0)
+			printf("No uniforms found.\n");
+		for (GLint i = 0; i < uniformCount; i++)
+		{
+			glGetActiveUniform(program, (GLuint)i, (const GLsizei)30, &length, &uniformSize, &uniformType, uniformName);
+
+			printf("Found new uniform #%d TypeID: %u Name: %s\n", i, uniformType, (char*)uniformName);
+			this->uniforms.insert({ uniformName,glGetUniformLocation(this->program, uniformName) });
+		}
 
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
-		printf("Shader compiled. Program ID - %d\n", this->program);
+		printf("Program ID - %d\n", this->program);
 		return true;
 	}
 
@@ -73,7 +86,7 @@ bool Shader::load(std::string vertexShaderName, std::string fragmentShaderName)
 	glGetProgramInfoLog(this->program, 1024, nullptr, errorMsg);
 	std::ofstream crash_log(crashLogFilename);
 	printf("Failed to link shaders to program, LOG:\n%s", errorMsg);
-	crash_log << "Linking error: sourceFiles - " << fragmentShaderName << "," << vertexShaderName<< "\nLOG:" << errorMsg;
+	crash_log << "Linking error: sourceFiles - " << fragmentShaderName << "," << vertexShaderName << "\nLOG:" << errorMsg;
 	printf("A crash has occured. Saved crash info in file: %s.", crashLogFilename.c_str());
 	crash_log.close();
 	glDeleteShader(vertexShader);
@@ -85,7 +98,7 @@ bool Shader::load(std::string vertexShaderName, std::string fragmentShaderName)
 GLuint Shader::currentProgram = 0;
 
 void Shader::deactivate()
-{	
+{
 	Shader::currentProgram = 0;
 	glUseProgram(0);
 }
@@ -96,7 +109,7 @@ void Shader::activate()
 	glUseProgram(this->program);
 }
 
-GLuint Shader::getUniformLocation(std::string name) 
+GLuint Shader::getUniformLocation(std::string name)
 {
 	std::map<std::string, GLuint>::iterator position = this->uniforms.find(name);
 	if (position != this->uniforms.end())

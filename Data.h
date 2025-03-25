@@ -25,6 +25,8 @@
 #include <IL/ilu.h>
 #include <IL/ilut.h>
 
+#include <rapidjson/document.h>
+#include <rapidjson/istreamwrapper.h>
 
 double getSimulationTime();
 int getFPS();

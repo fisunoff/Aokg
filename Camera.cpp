@@ -18,7 +18,7 @@ void Camera::setProjectionMatrix(float fovy, float aspect, float zNear, float zF
 void Camera::lookAt(glm::vec3 target)
 {
 	glm::vec3 direction = glm::normalize(target - this->position);
-	this->rotation = { 
+	this->rotation = {
 		glm::degrees(atan2(direction.z, direction.x)),
 					  glm::degrees(asin(direction.y)),
 					  0.0f

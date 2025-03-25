@@ -10,6 +10,7 @@ private:
 	glm::mat4 modelMatrix;
 
 	int meshId;
+	int materialId;
 	int textureId;
 public:
 	GraphicObject();
@@ -19,11 +20,13 @@ public:
 
 	float getAngle();
 	int getMeshId();
+	int getMaterialId();
 	int getTextureId();
 
 	void setColor(glm::vec4 color);
 	void setPosition(glm::vec3 position);
 	void setAngle(float degree);
 	void setMeshId(int newId);
+	void setMaterialId(int newId);
 	void setTextureId(int newId);
 };

@@ -37,7 +37,7 @@ bool Texture::load(std::string sourceFile)
 	printf("%d bytes of texture data loaded.\n", width*height*4);
 	return true;
 }
-void Texture::bind(GLenum texUnit) 
+void Texture::bind(GLenum texUnit)
 {
 	glEnable(texUnit);
 	glBindTexture(GL_TEXTURE_2D, this->texIndex);
