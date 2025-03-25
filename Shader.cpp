@@ -14,7 +14,7 @@ GLuint Shader::createShaderObject(GLenum type, std::string sourcePath)
 	shaderFile.read(buffer.data(), buffer.size());
 
 	GLuint shaderID = glCreateShader(type);
-
+	
 	GLchar const* pointerToBuffer = buffer.data();
 	glShaderSource(shaderID, 1, &pointerToBuffer, nullptr);
 	glCompileShader(shaderID);
@@ -55,11 +55,12 @@ bool Shader::load(std::string vertexShaderName, std::string fragmentShaderName)
 
 	GLint linkResult;
 	glGetProgramiv(program, GL_LINK_STATUS, &linkResult);
-	if (linkResult) 
+	if (linkResult)
 	{
 		this->uniforms.insert({ "color",glGetUniformLocation(this->program, "color") });
 		this->uniforms.insert({ "projectionMatrix",glGetUniformLocation(this->program, "projectionMatrix") });
 		this->uniforms.insert({ "modelViewMatrix",glGetUniformLocation(this->program, "modelViewMatrix") });
+		this->uniforms.insert({ "texture_0",glGetUniformLocation(this->program, "texture_0") });
 
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
@@ -72,7 +73,7 @@ bool Shader::load(std::string vertexShaderName, std::string fragmentShaderName)
 	glGetProgramInfoLog(this->program, 1024, nullptr, errorMsg);
 	std::ofstream crash_log(crashLogFilename);
 	printf("Failed to link shaders to program, LOG:\n%s", errorMsg);
-	crash_log << "Linking error: sourceFiles - " << fragmentShaderName << "," << vertexShaderName << "\nLOG:" << errorMsg;
+	crash_log << "Linking error: sourceFiles - " << fragmentShaderName << "," << vertexShaderName<< "\nLOG:" << errorMsg;
 	printf("A crash has occured. Saved crash info in file: %s.", crashLogFilename.c_str());
 	crash_log.close();
 	glDeleteShader(vertexShader);
@@ -84,7 +85,7 @@ bool Shader::load(std::string vertexShaderName, std::string fragmentShaderName)
 GLuint Shader::currentProgram = 0;
 
 void Shader::deactivate()
-{
+{	
 	Shader::currentProgram = 0;
 	glUseProgram(0);
 }
@@ -95,7 +96,7 @@ void Shader::activate()
 	glUseProgram(this->program);
 }
 
-GLuint Shader::getUniformLocation(std::string name)
+GLuint Shader::getUniformLocation(std::string name) 
 {
 	std::map<std::string, GLuint>::iterator position = this->uniforms.find(name);
 	if (position != this->uniforms.end())

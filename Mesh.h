@@ -11,7 +11,7 @@ class Mesh
 {
 public:
 	Mesh();
-	bool load(std::string filename);
+	bool load(std::string sourceFile);
 	void drawOne();
 private:
 	GLuint vao;

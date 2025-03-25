@@ -4,9 +4,9 @@ Camera::Camera()
 {
 	this->position = glm::vec3({ 0.0,3.0,5.0 });
 	lookAt({ 0.0,0.0,0.0 });
-	this->distance = 35.0f;
+	this->fov = 35.0f;
 
-	setProjectionMatrix(this->distance, 800.0 / 600.0, 1.0, 100.0);
+	setProjectionMatrix(this->fov, 800.0 / 600.0, 1.0, 100.0);
 	recalculateViewMatrix();
 }
 
@@ -18,10 +18,10 @@ void Camera::setProjectionMatrix(float fovy, float aspect, float zNear, float zF
 void Camera::lookAt(glm::vec3 target)
 {
 	glm::vec3 direction = glm::normalize(target - this->position);
-	this->rotation = {
+	this->rotation = { 
 		glm::degrees(atan2(direction.z, direction.x)),
-		glm::degrees(asin(direction.y)),
-		0.0f
+					  glm::degrees(asin(direction.y)),
+					  0.0f
 	};
 }
 
@@ -48,12 +48,12 @@ void Camera::rotate(float horizAngle, float vertAngle)
 	this->rotation.y = glm::clamp(this->rotation.y+vertAngle* sensitivity, -85.0f, 85.0f);
 	recalculateViewMatrix();
 }
-void Camera::zoom(float dR) 
+void Camera::zoom(float dR)
 {
 	this->position += this->fwdDirection * dR;
 	recalculateViewMatrix();
 }
-void Camera::recalculateViewMatrix() 
+void Camera::recalculateViewMatrix()
 {
 	glm::vec3 front = { cos(glm::radians(this->rotation.x)) * cos(glm::radians(this->rotation.y)),
 						sin(glm::radians(this->rotation.y)),

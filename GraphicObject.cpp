@@ -31,6 +31,11 @@ int GraphicObject::getMeshId()
 	return this->meshId;
 }
 
+int GraphicObject::getTextureId()
+{
+	return this->textureId;
+}
+
 void GraphicObject::setColor(glm::vec4 color)
 {
 	this->color = color;
@@ -51,4 +56,9 @@ void GraphicObject::setAngle(float degree)
 void GraphicObject::setMeshId(int newId)
 {
 	this->meshId = newId;
+}
+
+void GraphicObject::setTextureId(int newId)
+{
+	this->textureId = newId;
 }
