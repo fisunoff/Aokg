@@ -10,13 +10,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/hash.hpp>
 
-
 #include <string>
 #include <cmath>
 #include <algorithm>
 #include <fstream>
 #include <sstream>
 #include <memory>
+#include <array>
 #include <vector>
 #include <map>
 #include <unordered_map>
@@ -28,5 +28,3 @@
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 
-double getSimulationTime();
-int getFPS();

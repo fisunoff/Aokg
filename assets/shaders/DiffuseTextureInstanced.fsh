@@ -17,7 +17,6 @@ uniform float fogStartDistance;
 uniform float fogEndDistance;
 uniform float fogDensity;
 
-
 in vec3 position;
 in vec3 normal;
 in vec2 texCoord;
@@ -35,7 +34,7 @@ void main (void)
 	vec4 diffuse = mDiffuse * lDiffuse * max(dot(n_Normal, n_ToLight), 0.0f);
 	vec4 specular = mSpecular * lSpecular * pow(max(dot(n_ToEye, n_Reflect), 0.0f), mShininess);
 
-	vec3 color = vec3(ambient + diffuse + specular); 
+ 	vec3 color = vec3(ambient + diffuse + specular); 
 	float alpha = mDiffuse.a;
 
 	vec4 texColor = texture(texture_0, texCoord);
@@ -46,3 +45,4 @@ void main (void)
 
 	outputColor = mix(fogColor,vec4(color, alpha),A);
 }
+

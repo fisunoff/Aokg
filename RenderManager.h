@@ -19,6 +19,7 @@ class RenderManager
 	RenderManager(const RenderManager& root) = delete;
 	RenderManager& operator=(const RenderManager&) = delete;
 public:
+	int materialSwaps, textureSwaps, drawCalls;
 	static RenderManager& instance()
 	{
 		static RenderManager renderManager;

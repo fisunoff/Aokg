@@ -133,3 +133,10 @@ void Mesh::drawOne()
 	glDrawElements(GL_TRIANGLES, this->vertexCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
+
+void Mesh::drawMany(int count)
+{
+	glBindVertexArray(this->vao);
+	glDrawElementsInstanced(GL_TRIANGLES, this->vertexCount, GL_UNSIGNED_INT, 0, count);
+	glBindVertexArray(0);
+}

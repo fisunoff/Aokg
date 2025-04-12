@@ -1,4 +1,4 @@
-#include "GraphicObject.h";
+#include "GraphicObject.h"
 
 GraphicObject::GraphicObject()
 {
@@ -6,6 +6,11 @@ GraphicObject::GraphicObject()
 	this->position = { 0,0,0 };
 	this->color = glm::vec4{ 1,0,0,1 };
 	this->modelMatrix = glm::mat4({ 1,0,0,0 }, { 0,1,0,0 }, { 0,0,1,0 }, { this->position,1 });
+	this->dimensions = { 0,0,0 };
+	this->type = GraphicObjectType::none;
+	this->meshId = 0;
+	this->materialId = 0;
+	this->textureId = 0;
 }
 glm::vec4& GraphicObject::getColor()
 {
@@ -24,6 +29,16 @@ glm::vec3& GraphicObject::getPosition()
 float GraphicObject::getAngle()
 {
 	return this->angle;
+}
+
+glm::vec3 GraphicObject::getDimensions()
+{
+	return this->dimensions;
+}
+
+GraphicObjectType GraphicObject::getType()
+{
+	return this->type;
 }
 
 int GraphicObject::getMeshId()
@@ -52,10 +67,20 @@ void GraphicObject::setPosition(glm::vec3 position)
 	this->modelMatrix[3] = { this->position,1 };
 }
 
+void GraphicObject::setDimensions(glm::vec3 dimensions)
+{
+	this->dimensions = dimensions;
+}
+
 void GraphicObject::setAngle(float degree)
 {
-	this->angle = degree;
+	this->angle = glm::radians(-degree);
 	this->modelMatrix = glm::rotate(this->modelMatrix, this->angle, glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+void GraphicObject::setType(GraphicObjectType type)
+{
+	this->type = type;
 }
 
 void GraphicObject::setMeshId(int newId)

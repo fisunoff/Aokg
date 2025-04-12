@@ -8,6 +8,7 @@ public:
 	void setProjectionMatrix(float fovy, float aspect, float zNear, float zFar);
 	glm::mat4& getProjectionMatrix();
 	glm::mat4& getViewMatrix();
+	glm::vec3& getPosition();
 	void moveOXZ(float dx, float dz);
 	void rotate(float horizAngle, float vertAngle);
 	void zoom(float dR);

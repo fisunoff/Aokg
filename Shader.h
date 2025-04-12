@@ -21,4 +21,5 @@ public:
 	void setUniform(std::string name, glm::vec2);
 	void setUniform(std::string name, glm::vec4);
 	void setUniform(std::string name, glm::mat4);
+	void setUniform(std::string name, std::vector<glm::mat4>&);
 };

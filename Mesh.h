@@ -9,13 +9,13 @@ struct Vertex
 };
 class Mesh
 {
-public:
-	Mesh();
-	bool load(std::string sourceFile);
-	void drawOne();
-private:
 	GLuint vao;
 	GLuint vertexBuffer;
 	GLuint indexBuffer;
 	int vertexCount;
+public:
+	Mesh();
+	bool load(std::string sourceFile);
+	void drawOne();
+	void drawMany(int count);
 };

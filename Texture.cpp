@@ -34,7 +34,7 @@ bool Texture::load(std::string sourceFile)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
 
-	printf("%d bytes of texture data loaded.\n", width*height*4);
+	printf("%d bytes of texture data loaded.\n", width * height * 4);
 	return true;
 }
 void Texture::bind(GLenum texUnit)
