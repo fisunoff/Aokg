@@ -7,13 +7,17 @@
 #include "Material.h"
 #include "Light.h"
 #include "ResourceManager.h"
+#include "FBO.h"
 
 class RenderManager
 {
 	ResourceManager& rm;
 	Camera* camera;
 	std::vector<Shader> shaders;
+	std::vector<FBO> fbos;
 	std::vector<GraphicObject> graphicObjects;
+
+	int windowHeight, windowWidth, postProcessingMode;
 
 	RenderManager() :rm(ResourceManager::instance()) {};
 	RenderManager(const RenderManager& root) = delete;
@@ -29,6 +33,11 @@ public:
 	bool init();
 	void start();
 	void setCamera(Camera* camera);
+	void updateViewport(int w, int h);
 	void addToRenderQueue(GraphicObject& graphicObject);
 	void finish();
+	void nextPostProcessing();
+	void drawAllObjects();
+	void drawQuad();
+	int	 getPostProcessing();
 };
