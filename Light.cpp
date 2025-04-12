@@ -5,7 +5,7 @@ Light::Light()
 	this->ambient = { 0.3,0.3,0.3,1.0 };
 	this->diffuse = { 1.0,1.0,1.0,1.0 };
 	this->specular = { 0.5,0.5,0.4,1.0 };
-	this->direction = { 0.0,1.0,0.0,0.0 };
+	this->direction = { 1.0,1.0,1.0,0.0 };
 }
 
 glm::vec4& Light::getDirection() 
